@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardImg, CardText, CardBody,
   CardTitle, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
-// import { Pass } from './MenuComponent'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
   function RenderDish({dish}) {

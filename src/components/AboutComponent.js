@@ -2,6 +2,7 @@ import React from 'react';
 import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { CardImg, CardText, CardTitle, CardSubtitle} from 'reactstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function About(props) {
 

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Breadcrumb, BreadcrumbItem, Button, Form, FormGroup, Label, Input, Col} from 'reactstrap';
 import { Link } from 'react-router-dom';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Contact extends Component {
 
@@ -67,7 +67,7 @@ class Contact extends Component {
                 <div className="col-12 col-sm-11 offset-sm-1">
                     <div className="btn-group" role="group">
                         <a role="button" className="btn btn-primary" href="tel:+85212345678"><i className="fa fa-phone"></i> Call</a>
-                        <a role="button" className="btn btn-info"><i className="fa fa-skype"></i> Skype</a>
+                        <a role="button" className="btn btn-info" href="/"><i className="fa fa-skype" ></i> Skype</a>
                         <a role="button" className="btn btn-success" href="mailto:confusion@food.net"><i className="fa fa-envelope-o"></i> Email</a>
                     </div>
                 </div>
@@ -110,14 +110,18 @@ class Contact extends Component {
                             <Col md={10}>
                                 <Input type="email" id="email" name="email"
                                 placeholder = "email Adress"
-                                value = {this.state.lastname} />
+                                value = {this.state.lastname}
+                                onChange={this.handleInputChange} />
                             </Col>
                         </FormGroup>
                         <FormGroup row>
                             <Col md={{size: 6, offset: 2}}>
                                 <FormGroup check>
                                     <Label check>
-                                        <Input type = "checkbox" name="agree" checked={this.state.agree}/>
+                                        <Input type = "checkbox" 
+                                        name="agree" 
+                                        checked={this.state.agree}
+                                        onChange={this.handleInputChange}/>
                                         {''}
                                         <strong> May we contact you?</strong>
                                     </Label>
@@ -125,7 +129,8 @@ class Contact extends Component {
                             </Col>
                             <Col md={{size: 3, offset: 1}}>
                                 <Input type="select" name="contactType"
-                                value={this.state.contactType}>
+                                value={this.state.contactType}
+                                onChange={this.handleInputChange}>
                                     <option> Tel. </option>
                                     <option>Email </option>
 
@@ -137,7 +142,8 @@ class Contact extends Component {
                             <Col md={10}>
                                 <Input type="textarea" id="message" name="message"
                                 rows = "12"
-                                value = {this.state.message} />
+                                value = {this.state.message} 
+                                onChange={this.handleInputChange}/>
                             </Col>
                         </FormGroup>
                         <FormGroup row>
