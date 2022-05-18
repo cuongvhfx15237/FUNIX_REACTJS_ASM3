@@ -15,10 +15,12 @@ import {
   Modal,
   Input,
   ModalHeader,
-  Col,
+  Col, Row
 } from "reactstrap";
+import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Link, useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { getSpaceUntilMaxLength } from "@testing-library/user-event/dist/utils";
 // import { useState } from 'react/cjs/react.production.min';
 
 function RenderDish({ dish }) {
@@ -45,6 +47,14 @@ function RenderComments({ comments }) {
     debugger
     toggleModal();
   };
+const yourname = '';
+const required = (val) => val && val.length;
+const maxLength = (len) => (val) => !(val) || (val.length<=len);
+const minLength = (len) => (val) => val && (val.length>=len);
+const isNumber = (val) => !isNaN(Number(val));
+const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
+
+
   return (
     <div className="container" style={{ padding: 0 + "em" }}>
       <Card>
@@ -95,28 +105,39 @@ function RenderComments({ comments }) {
                     <option value="5">5</option>
                   </Input>
                 </FormGroup>
-                <FormGroup>
-                  <Label htmlFor="YourName">YourName</Label>
-                  <Input
+                <Row className="form=group">
+                  <Label htmlFor="yourname">YourName</Label>
+                  <Col md={10}>
+                  <Control.text
+                    model=".yourname"
                     type="text"
-                    id="YourName"
+                    id="yourName"
+                    className="yourname"
                     name="YourName"
-                    innerRef={(input, YourName) => (YourName = input)}
+                    validators={{required, minLength: minLength(2), maxLength: maxLength(15)}}
                   />
-                </FormGroup>
+                    <Errors className="text-danger" 
+                      model=".yourname" 
+                      show="touched"
+                      messages={{
+                      required: 'required',
+                      minLength: 'Must be greater than 2 characters',
+                      maxLength: 'Must be 15 characters or less',
+                    }}/>
+                    </Col>
+                </Row>
                 <FormGroup>
                   <Label htmlFor="Comments">Comments</Label>
                   <Input
                     type="textarea"
                     id="comment"
+                    className="comment"
                     name="comment"
-                    innerRef={(input, Comments) => (Comments= input)}
                   />
                 </FormGroup>
                 <Button
-                  type="button"
-                  style={{ color: "primary" }}
-                  onClick={handleComment}>
+                  type="submit"
+                  style={{ color: "primary" }}>
                   Submit
                 </Button>
               </Form>
