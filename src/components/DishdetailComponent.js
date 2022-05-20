@@ -107,8 +107,8 @@ function RenderComments({ comments }) {
                   <Label htmlFor="yourname">
                     Your Name
                   </Label>
-                    <Input
-                      type="text"
+                    <Control.text
+                      // type="text"
                       model=".yourname"
                       id="yourname"
                       name="yourname"
