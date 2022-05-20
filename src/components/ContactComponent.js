@@ -12,36 +12,13 @@ const minLength = (len) => (val) => val && (val.length>=len);
 const isNumber = (val) => !isNaN(Number(val));
 const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
-class Contact extends Component {
 
-    constructor(props){
-        super(props);
-        this.state = {
-            firstname: '',
-            lastname: '',
-            telnum:'',
-            email:'',
-            agree: false,
-            contactType: 'Tel.',
-            message: '',
-            touched: {
-                firstname: false,
-                lastname: false,
-                telnum: false,
-                email: false,
-            }
-        }
-        this.handleSubmit = this.handleSubmit.bind(this)
-
-    }
-
-
-    handleSubmit(values){
+function Contact () {
+    const  handleSubmit=(values)=>{
         console.log("Current State is: " + JSON.stringify(values))
         alert ("Current State is: " + JSON.stringify(values))
     }
 
-    render(){
     return(
         <div className="container">
             <div className="row">
@@ -85,7 +62,7 @@ class Contact extends Component {
                     <h3>Send us your feedback</h3>
                 </div>
                 <div className='col-12 col-md-9'>
-                <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+                <LocalForm onSubmit={(values) => handleSubmit(values)}>
                             <Row className="form-group">
                                 <Label htmlFor="firstname" md={2}>First Name</Label>
                                 <Col md={10}>
@@ -123,7 +100,7 @@ class Contact extends Component {
                                          model='.lastname'
                                          show='touched'
                                          messages={{
-                                             required:'required',
+                                            required:'required',
                                             minLength: 'Must be greater than 2 characters',
                                             maxLength: 'Must be 15 characters or less'
                                          }}
@@ -213,6 +190,5 @@ class Contact extends Component {
         </div>
     )
     };
-}
 
 export default Contact;

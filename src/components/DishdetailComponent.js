@@ -15,13 +15,13 @@ import {
   Modal,
   Input,
   ModalHeader,
-  Col, Row
+  Col,
+  Row,
 } from "reactstrap";
-import { Control, LocalForm, Errors } from 'react-redux-form';
-import { Link, useParams } from "react-router-dom";
+import { Control, Errors, combineForms, LocalForm } from "react-redux-form";
+import { legacy_createStore as createStore, combineReducers } from "redux";
+import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { getSpaceUntilMaxLength } from "@testing-library/user-event/dist/utils";
-// import { useState } from 'react/cjs/react.production.min';
 
 function RenderDish({ dish }) {
   return (
@@ -40,20 +40,20 @@ function RenderComments({ comments }) {
   const toggleModal = () => {
     setisModalOpen(!isModalOpen);
   };
-  const handleComment = (event, Ratting, YourName, Comments) => {
-    
-    alert("Ratting: " + Ratting.value + " YourName: " + YourName.value
-    + " Comments: " + Comments.value);
-    debugger
+  const handleSubmit = (values) => {
+    console.log("Current State is: " + JSON.stringify(values));
+    alert("Current State is: " + JSON.stringify(values));
     toggleModal();
   };
-const yourname = '';
-const required = (val) => val && val.length;
-const maxLength = (len) => (val) => !(val) || (val.length<=len);
-const minLength = (len) => (val) => val && (val.length>=len);
-const isNumber = (val) => !isNaN(Number(val));
-const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
-
+  // const initialNameState = {};
+  // const store = createStore(combineReducers({
+  //   deep: combineForms({
+  //     yourname: initialNameState,
+  //   }, 'deep'),
+  // }));
+  const required = (val) => val && val.length;
+  const maxLength = (len) => (val) => !val || val.length <= len;
+  const minLength = (len) => (val) => val && val.length >= len;
 
   return (
     <div className="container" style={{ padding: 0 + "em" }}>
@@ -77,9 +77,9 @@ const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val
               </div>
             );
           })}
-          <Form>
-            {/*button*/}
 
+          {/*button*/}
+          <Row className="form-group">
             <Button
               type="button"
               style={{ color: "gray", backgroundColor: "transparent" }}
@@ -87,46 +87,51 @@ const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val
             >
               <i className="fa fa-bookmark"></i> Submit Comment
             </Button>
-          </Form>
+          </Row>
+
           <Modal isOpen={isModalOpen} toggle={toggleModal}>
             <ModalHeader toggle={toggleModal}>Comments</ModalHeader>
             <ModalBody>
-              <Form onSubmit={handleComment}>
-                <FormGroup>
+              <LocalForm onSubmit={(values) => handleSubmit(values)}>
+                <Row className="form-group">
                   <Label htmlFor="Ratting">Ratting</Label>
-                  <Input
-                    type="select"
-                    id="Ratting"
-                    name="Ratting"     >
+                  <Input type="select" id="Ratting" name="Ratting">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
                     <option value="5">5</option>
                   </Input>
-                </FormGroup>
-                <Row className="form=group">
-                  <Label htmlFor="yourname">YourName</Label>
-                  <Col md={10}>
-                  <Control.text
-                    model=".yourname"
-                    type="text"
-                    id="yourName"
-                    className="yourname"
-                    name="YourName"
-                    validators={{required, minLength: minLength(2), maxLength: maxLength(15)}}
-                  />
-                    <Errors className="text-danger" 
-                      model=".yourname" 
+                </Row>
+                <Row className="form-group">
+                  <Label htmlFor="yourname">
+                    Your Name
+                  </Label>
+                    <Input
+                      type="text"
+                      model=".yourname"
+                      id="yourname"
+                      name="yourname"
+                      placeholder="First Name"
+                      className="form-control"
+                      validators={{
+                        required,
+                        minLength: minLength(3),
+                        maxLeng: maxLength(15),
+                      }}
+                    />
+                    <Errors
+                      className="text-danger"
+                      model=".yourname"
                       show="touched"
                       messages={{
-                      required: 'required',
-                      minLength: 'Must be greater than 2 characters',
-                      maxLength: 'Must be 15 characters or less',
-                    }}/>
-                    </Col>
+                        required: "required",
+                        minLength: "Must be greater than 2 characters",
+                        maxLength: "Must be 15 characters or less",
+                      }}
+                    />
                 </Row>
-                <FormGroup>
+                <Row className="form-group">
                   <Label htmlFor="Comments">Comments</Label>
                   <Input
                     type="textarea"
@@ -134,13 +139,13 @@ const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val
                     className="comment"
                     name="comment"
                   />
-                </FormGroup>
-                <Button
-                  type="submit"
-                  style={{ color: "primary" }}>
-                  Submit
-                </Button>
-              </Form>
+                </Row>
+                <Row className="form-group">
+                  <Button type="submit" style={{ color: "primary" }}>
+                    Submit
+                  </Button>
+                </Row>
+              </LocalForm>
             </ModalBody>
           </Modal>
         </CardBody>
