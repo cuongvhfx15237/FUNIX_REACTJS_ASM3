@@ -25,7 +25,7 @@ const StaffList = (props, iStaffs) => {
   if (searchName === "") {
     iStaffs = props.Staffs;
   } else {
-    iStaffs = props.Staffs.filter((iStaff) => iStaff.name === searchName);
+    iStaffs = props.Staffs.filter((iStaff) => iStaff.name.match(eval("/"+ searchName + "/gi"))!=null);
   }
 
   //Defragment
@@ -40,10 +40,7 @@ const DepartmentContainer = props.Departments.map((departmentItem) => {
   
   const Staffs = iStaffs.filter(iStaff => iStaff.department.name == departmentItem.name)
       if (Defragment === "Defragment") {
-
-
-
-        return(
+      return(
 
           <div className="row"  style={{border: "1px solid black" }}>
             <div
@@ -70,7 +67,6 @@ const DepartmentContainer = props.Departments.map((departmentItem) => {
           </div>
           )
       }
-
       else {
     return (
       Staffs.map(Staff => {
@@ -81,16 +77,8 @@ const DepartmentContainer = props.Departments.map((departmentItem) => {
               style={{ padding: 1 + "em" }}>
               <RenderStaffList Staff={Staff} />
             </div>
-        )
-
-          
+        )        
         }))}})
-
-      
-
-  
-  //can xu ly o day
-
   return (
     <div className="container-fluid">
       <div className="row">

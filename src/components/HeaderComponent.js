@@ -1,31 +1,22 @@
-import { Component } from 'react'
+import {  useState } from 'react'
 import { Nav, Navbar, NavbarBrand, NavbarToggler, Collapse, NavItem} from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-class Header extends Component {
-    constructor(props) {
-        super(props);   
-        this.toggleNav = this.toggleNav.bind(this);
-        this.state = {
-          isNavOpen: false
-        };
-      }
 
-      toggleNav() {
-        this.setState({
-          isNavOpen: !this.state.isNavOpen
-        });
-      }
+function Header(){
+    const [isNavOpen, setiNavOpen]= useState(false);
+    function toggleNav(){
+        setiNavOpen(!isNavOpen);
+    }
 
-    render() {
         return(
             <div className="container-fluid">
                 <Navbar dark expand="md" style={{margin: 0 + 'em', backgroundColor: 'Dodgerblue'}}>
-                        <NavbarToggler onClick={this.toggleNav} />
+                        <NavbarToggler onClick={toggleNav} />
                         <NavbarBrand className="mr-auto" href="/">
                             <img src='assets/images/logo.png' height="50px" width="50px" alt='LogoIcon' />
                             </NavbarBrand>
-                        <Collapse isOpen={this.state.isNavOpen} navbar>
+                        <Collapse isOpen={isNavOpen} navbar>
                             <Nav navbar>
                             <NavItem>
                                 <NavLink className="nav-link"  to='/Nhanvien'>
@@ -53,7 +44,5 @@ class Header extends Component {
                        
                 </Navbar>
             </div>
-        );
-    }
-}
+        );}
 export default Header;
