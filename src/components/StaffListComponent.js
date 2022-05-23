@@ -1,21 +1,47 @@
 import React, { useState } from "react";
-import { Card, CardImg, CardTitle } from "reactstrap";
+import {
+  Card,
+  CardImg,
+  CardTitle,
+  FormGroup,
+  ModalBody,
+  ModalHeader,
+  Form,
+  Label,
+  Input,
+} from "reactstrap";
+import useForm from "./Validator";
 import "../index.css";
+import validate from "./validateinfo";
 import { Link } from "react-router-dom";
+import { Button, Modal } from "reactstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { toHaveFormValues } from "@testing-library/jest-dom/dist/matchers";
 
-function RenderStaffList( {Staff} ) {
-  //render  list staff with image and name;
-  return (
-    <Card>
-      <Link to={`${Staff.id}`}>
-        <CardImg src={Staff.image} alt={Staff.image} />
-        <CardTitle style={{ textAlign: "center" }}>{Staff.name}</CardTitle>
-      </Link>
-    </Card>
+function StaffList(props, iStaffs, submitForm) {
+  const [isModalOpen, setisModalOpen] = useState(false);
+  const toggleModal = () => {
+    setisModalOpen(!isModalOpen);
+  };
+
+  function RenderStaffList({ Staff }) {
+    //render  list staff with image and name;
+    return (
+      <Card>
+        <Link to={`${Staff.id}`}>
+          <CardImg src={Staff.image} alt={Staff.image} />
+          <CardTitle style={{ textAlign: "center" }}>{Staff.name}</CardTitle>
+        </Link>
+      </Card>
+    );
+  }
+
+
+
+  const { handleChange, handleSubmit, values, errors } = useForm(
+    submitForm,
+    validate
   );
-}
-
-const StaffList = (props, iStaffs) => {
   // getvalue search Name
   //params : iStaff
   const [searchName, setSearchName] = useState("");
@@ -25,65 +51,82 @@ const StaffList = (props, iStaffs) => {
   if (searchName === "") {
     iStaffs = props.Staffs;
   } else {
-    iStaffs = props.Staffs.filter((iStaff) => iStaff.name.match(eval("/"+ searchName + "/gi"))!=null);
+    iStaffs = props.Staffs.filter(
+      (iStaff) => iStaff.name.match(eval("/" + searchName + "/gi")) != null
+    );
   }
 
   //Defragment
-  const [Defragment, setDefragment] = useState(""); 
+  const [Defragment, setDefragment] = useState("");
   const myDefragment = () => {
-
     setDefragment(document.getElementById("Defragment-select").value);
-  
   };
 
-const DepartmentContainer = props.Departments.map((departmentItem) => {
-  
-  const Staffs = iStaffs.filter(iStaff => iStaff.department.name == departmentItem.name)
-      if (Defragment === "Defragment") {
-      return(
-
-          <div className="row"  style={{border: "1px solid black" }}>
-            <div
-              key={departmentItem.id}
-              className="col-sm-12 col-md-3 col-xl-2"
-              style={{ padding: 1 + "em", 
-                      backgroundColor: "#1e90ff", 
-                      border: "1px solid black", 
-                      fontSize: 1 + "em", 
-                      textAlign:"center",
-                      width: "100%"}}>
-              {departmentItem.name}
-            </div>
-              <div className="row">
-              {Staffs.map((Staff) => {
-                  return(
-                  <div 
+  const DepartmentContainer = props.Departments.map((departmentItem) => {
+    const Staffs = iStaffs.filter(
+      (iStaff) => iStaff.department.name == departmentItem.name
+    );
+    if (Defragment === "Defragment") {
+      return (
+        <div
+          className="row"
+          style={{
+            margin: "inherit",
+            padding: "0px",
+            border: "1px solid black",
+          }}
+        >
+          <div
+            key={departmentItem.id}
+            className="col-sm-12 col-md-3 col-xl-2"
+            style={{
+              padding: 1 + "em",
+              backgroundColor: "#1e90ff",
+              border: "1px solid black",
+              fontSize: 1 + "em",
+              textAlign: "center",
+              width: "100%",
+            }}
+          >
+            {departmentItem.name}
+          </div>
+          <div className="row">
+            {Staffs.map((Staff) => {
+              return (
+                <div
                   key={Staff.id}
                   className="col-sm-12 col-md-3 col-xl-2"
-                  style={{ padding: 1 + "em", border: "1px solid black" }} >
+                  style={{ padding: 1 + "em" }}
+                >
                   <RenderStaffList Staff={Staff} />
-                </div>)})}
                 </div>
+              );
+            })}
           </div>
-          )
-      }
-      else {
-    return (
-      Staffs.map(Staff => {
-        return(
-            <div
-              key={Staff.id}
-              className="col-sm-6 col-md-4 col-xl-2"
-              style={{ padding: 1 + "em" }}>
-              <RenderStaffList Staff={Staff} />
-            </div>
-        )        
-        }))}})
+        </div>
+      );
+    } else {
+      return Staffs.map((Staff) => {
+        return (
+          <div
+            key={Staff.id}
+            className="col-sm-6 col-md-4 col-xl-2"
+            style={{ padding: 1 + "em" }}
+          >
+            <RenderStaffList Staff={Staff} />
+          </div>
+        );
+      });
+    }
+  });
+
   return (
     <div className="container-fluid">
       <div className="row">
-        <h2 style={{ width: 50 + "%" }}>Nhân Viên</h2>
-        <div className="input-group" style={{ width: 50 + "%" }}>
+        <h2 style={{ width: 20 + "%" }}>Nhân Viên</h2>
+
+        {/*search*/}
+        <div className="input-group" style={{ width: 80 + "%" }}>
           <input
             id="SearchName"
             type="text"
@@ -95,7 +138,12 @@ const DepartmentContainer = props.Departments.map((departmentItem) => {
           <button
             type="button"
             className="btn btn-outline-primary col-sm-3 col-md-2 col-xl-2"
-            style={{ backgroundColor: "none" }}
+            style={{
+              backgroundColor: "none",
+              width: "20%",
+              minWidth: "50px",
+              padding: "0px",
+            }}
             onClick={mySearch}
           >
             search
@@ -103,23 +151,156 @@ const DepartmentContainer = props.Departments.map((departmentItem) => {
         </div>
       </div>
       <hr />
-      <div  className="row">
-      <select className="form-select" id="Defragment-select" style={{margin: '0px', width: '80%'}} >
-        <option value="Default">None Defragment</option>
-        <option value="Defragment">Defragment with Deparment</option>
-      </select>
-      <button
-        type="button"
-        className="btn btn-primary"
-        style={{margin: '0px', width: '20%'}}
-        onClick={myDefragment}
-      >        Submit
-      </button>
-      </div>
+
+      {/*add Staff*/}
+      <FormGroup className="row" style={{ margin: "0px", width: "100%" }}>
+        <div style={{ width: "20%", margin: "0px", padding: "0px" }}>
+          <Button
+            className="btn btn-outline-primary"
+            type="button"
+            style={{
+              maxWidth: "100%",
+              minWidth: "50px",
+              height: "100%",
+              backgroundColor: "none",
+            }}
+            onClick={toggleModal}
+          >
+            ADD
+          </Button>
+
+          <Modal
+            className="modal-body"
+            isOpen={isModalOpen}
+            toggle={toggleModal}
+          >
+            <Form
+              id="form-1"
+              className="row"
+              onSubmit={handleSubmit}
+            >
+              <ModalHeader toggle={toggleModal}>
+                Thông tin nhân Viên
+              </ModalHeader>
+              <ModalBody>
+                <FormGroup className="add-form Form">
+                  <Label className="col-sm-12 col-md-3 col-xl-3">Tên</Label>
+                  <Input
+                    type="text"
+                    id="fullname"
+                    name="fullname"
+                    className="col-sm-12 col-md-9 col-xl-9"
+                    placeholder="Họ và Tên"
+                    value={toHaveFormValues.fullname}
+                    onBlur={handleChange}
+                  /> {errors.email && <p>{errors.email}</p>}
+                </FormGroup>
+                <FormGroup className="add-form">
+                  <Label className="col-sm-12 col-md-3 col-xl-3">
+                    Ngày sinh
+                  </Label>
+                  <Input
+                    type="text"
+                    id="birthday"
+                    name="birthday"
+                    className="col-sm-12 col-md-9 col-xl-9"
+                    placeholder="dd/mm/yyyy"
+                  />
+                  <span className="form-message"></span>
+                </FormGroup>
+                <FormGroup className="add-form">
+                  <Label className="col-sm-12 col-md-3 col-xl-3">
+                    Ngày vào công ty
+                  </Label>
+                  <Input
+                    type="text"
+                    id="startday"
+                    name="startday"
+                    className="col-sm-12 col-md-9 col-xl-9"
+                    placeholder="dd/mm/yyyy"
+                  />
+                  <span className="form-message"></span>
+                </FormGroup>
+                <FormGroup className="add-form">
+                  <Label className="col-sm-12 col-md-3 col-xl-3">
+                    Phòng Ban
+                  </Label>
+                  <Input
+                    type="text"
+                    id="department"
+                    name="department"
+                    className="col-sm-12 col-md-9 col-xl-9"
+                  />
+                  <span className="form-message"></span>
+                </FormGroup>
+                <FormGroup className="add-form">
+                  <Label className="col-sm-12 col-md-3 col-xl-3">
+                    Hệ số lương
+                  </Label>
+                  <Input
+                    type="text"
+                    id="salary"
+                    name="salary"
+                    className="col-sm-12 col-md-9 col-xl-9"
+                  />
+                  <span className="form-message"></span>
+                </FormGroup>
+                <FormGroup className="add-form">
+                  <Label className="col-sm-12 col-md-3 col-xl-3">
+                    Số ngày đã làm thêm
+                  </Label>
+                  <Input
+                    type="text"
+                    id="overtime"
+                    name="overtime"
+                    className="col-sm-12 col-md-9 col-xl-9"
+                  />
+                  <span className="form-message"></span>
+                </FormGroup>
+              </ModalBody>
+            </Form>
+          </Modal>
+        </div>
+        {/*Sort*/}
+        <div
+          className="row"
+          style={{
+            width: "80%",
+            margin: "0px",
+            padding: "0px",
+            justifyContent: "end",
+          }}
+        >
+          <select
+            className="form-select rounded col-sm-9 col-md-10 col-xl-10"
+            id="Defragment-select"
+            style={{ width: "80%" }}
+          >
+            <option value="Default">None Defragment</option>
+            <option value="Defragment">Defragment with Deparment</option>
+          </select>
+          <Button
+            type="button"
+            className="btn btn-outline-primary col-sm-3 col-md-2 col-xl-2"
+            style={{
+              width: "20%",
+              minWidth: "50px",
+              background: "none",
+              padding: "0px",
+            }}
+            onClick={myDefragment}
+          >
+            {" "}
+            Submit
+          </Button>
+        </div>
+      </FormGroup>
+
+      {/*body*/}
       <div className="row">{DepartmentContainer}</div>
       <div className="row">Bấm vào tên Nhân Viên để xem thông tin cụ thể.</div>
     </div>
   );
-};
+}
 
 export default StaffList;
