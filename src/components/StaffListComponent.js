@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import { Button, Modal } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { toHaveFormValues } from "@testing-library/jest-dom/dist/matchers";
+import StaffModified from "./AddStaff";
 
 function StaffList(props, iStaffs, submitForm) {
   const [isModalOpen, setisModalOpen] = useState(false);
@@ -153,6 +154,7 @@ function StaffList(props, iStaffs, submitForm) {
       <hr />
 
       {/*add Staff*/}
+   
       <FormGroup className="row" style={{ margin: "0px", width: "100%" }}>
         <div style={{ width: "20%", margin: "0px", padding: "0px" }}>
           <Button
@@ -168,99 +170,14 @@ function StaffList(props, iStaffs, submitForm) {
           >
             ADD
           </Button>
-
           <Modal
             className="modal-body"
+            style={{ width: "100%", maxWidth:"60%", margin: "auto", padding: "0px" }}
             isOpen={isModalOpen}
             toggle={toggleModal}
-          >
-            <Form
-              id="form-1"
-              className="row"
-              onSubmit={handleSubmit}
-            >
-              <ModalHeader toggle={toggleModal}>
-                Thông tin nhân Viên
-              </ModalHeader>
-              <ModalBody>
-                <FormGroup className="add-form Form">
-                  <Label className="col-sm-12 col-md-3 col-xl-3">Tên</Label>
-                  <Input
-                    type="text"
-                    id="fullname"
-                    name="fullname"
-                    className="col-sm-12 col-md-9 col-xl-9"
-                    placeholder="Họ và Tên"
-                    value={toHaveFormValues.fullname}
-                    onBlur={handleChange}
-                  /> {errors.email && <p>{errors.email}</p>}
-                </FormGroup>
-                <FormGroup className="add-form">
-                  <Label className="col-sm-12 col-md-3 col-xl-3">
-                    Ngày sinh
-                  </Label>
-                  <Input
-                    type="text"
-                    id="birthday"
-                    name="birthday"
-                    className="col-sm-12 col-md-9 col-xl-9"
-                    placeholder="dd/mm/yyyy"
-                  />
-                  <span className="form-message"></span>
-                </FormGroup>
-                <FormGroup className="add-form">
-                  <Label className="col-sm-12 col-md-3 col-xl-3">
-                    Ngày vào công ty
-                  </Label>
-                  <Input
-                    type="text"
-                    id="startday"
-                    name="startday"
-                    className="col-sm-12 col-md-9 col-xl-9"
-                    placeholder="dd/mm/yyyy"
-                  />
-                  <span className="form-message"></span>
-                </FormGroup>
-                <FormGroup className="add-form">
-                  <Label className="col-sm-12 col-md-3 col-xl-3">
-                    Phòng Ban
-                  </Label>
-                  <Input
-                    type="text"
-                    id="department"
-                    name="department"
-                    className="col-sm-12 col-md-9 col-xl-9"
-                  />
-                  <span className="form-message"></span>
-                </FormGroup>
-                <FormGroup className="add-form">
-                  <Label className="col-sm-12 col-md-3 col-xl-3">
-                    Hệ số lương
-                  </Label>
-                  <Input
-                    type="text"
-                    id="salary"
-                    name="salary"
-                    className="col-sm-12 col-md-9 col-xl-9"
-                  />
-                  <span className="form-message"></span>
-                </FormGroup>
-                <FormGroup className="add-form">
-                  <Label className="col-sm-12 col-md-3 col-xl-3">
-                    Số ngày đã làm thêm
-                  </Label>
-                  <Input
-                    type="text"
-                    id="overtime"
-                    name="overtime"
-                    className="col-sm-12 col-md-9 col-xl-9"
-                  />
-                  <span className="form-message"></span>
-                </FormGroup>
-              </ModalBody>
-            </Form>
-          </Modal>
-        </div>
+          >   <StaffModified/>
+              </Modal>
+          </div>
         {/*Sort*/}
         <div
           className="row"
