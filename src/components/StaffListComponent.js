@@ -1,29 +1,16 @@
 import React, { useState } from "react";
-import {
-  Card,
-  CardImg,
-  CardTitle,
-  FormGroup,
-  ModalBody,
-  ModalHeader,
-  Form,
-  Label,
-  Input,
-} from "reactstrap";
+import { Card, CardImg, CardTitle } from "reactstrap";
 import useForm from "./Validator";
 import "../index.css";
 import validate from "./validateinfo";
 import { Link } from "react-router-dom";
 import { Button, Modal } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { toHaveFormValues } from "@testing-library/jest-dom/dist/matchers";
-import StaffModified from "./AddStaff";
+import AddStaff from "./validateinfo";
 
 function StaffList(props, iStaffs, submitForm) {
-  const [isModalOpen, setisModalOpen] = useState(false);
-  const toggleModal = () => {
-    setisModalOpen(!isModalOpen);
-  };
+  const [modalAdd, setModalAdd] = useState(false);
+  const toggle1 = () => setModalAdd(!modalAdd);
 
   function RenderStaffList({ Staff }) {
     //render  list staff with image and name;
@@ -37,12 +24,6 @@ function StaffList(props, iStaffs, submitForm) {
     );
   }
 
-
-
-  const { handleChange, handleSubmit, values, errors } = useForm(
-    submitForm,
-    validate
-  );
   // getvalue search Name
   //params : iStaff
   const [searchName, setSearchName] = useState("");
@@ -124,27 +105,24 @@ function StaffList(props, iStaffs, submitForm) {
   return (
     <div className="container-fluid">
       <div className="row">
-        <h2 style={{ width: 20 + "%" }}>Nhân Viên</h2>
+        <h2 className="col-sm-2 col-md-2 col-xl-2">Nhân Viên</h2>
 
         {/*search*/}
-        <div className="input-group" style={{ width: 80 + "%" }}>
+        <div className="col-sm-7 col-md-8 col-xl-8">
           <input
             id="SearchName"
             type="text"
-            className="form-control rounded col-sm-9 col-md-10 col-xl-10"
+            className="form-control "
             placeholder="Search"
             aria-label="Search"
             aria-describedby="search-addon"
           />
+        </div>
+        <div className="col-sm-3 col-md-2 col-xl-2">
           <button
             type="button"
-            className="btn btn-outline-primary col-sm-3 col-md-2 col-xl-2"
-            style={{
-              backgroundColor: "none",
-              width: "20%",
-              minWidth: "50px",
-              padding: "0px",
-            }}
+            style={{ width: "100%" }}
+            className="btn btn-outline-primary "
             onClick={mySearch}
           >
             search
@@ -154,68 +132,48 @@ function StaffList(props, iStaffs, submitForm) {
       <hr />
 
       {/*add Staff*/}
-   
-      <FormGroup className="row" style={{ margin: "0px", width: "100%" }}>
-        <div style={{ width: "20%", margin: "0px", padding: "0px" }}>
-          <Button
-            className="btn btn-outline-primary"
-            type="button"
-            style={{
-              maxWidth: "100%",
-              minWidth: "50px",
-              height: "100%",
-              backgroundColor: "none",
-            }}
-            onClick={toggleModal}
-          >
+      <div className="row">
+        <div className="col-sm-2 col-md-2 col-xl-2">
+          <Button color="primary" onClick={toggle1}>
             ADD
           </Button>
-          <Modal
-            className="modal-body"
-            style={{ width: "100%", maxWidth:"60%", margin: "auto", padding: "0px" }}
-            isOpen={isModalOpen}
-            toggle={toggleModal}
-          >   <StaffModified/>
-              </Modal>
-          </div>
-        {/*Sort*/}
-        <div
-          className="row"
-          style={{
-            width: "80%",
-            margin: "0px",
-            padding: "0px",
-            justifyContent: "end",
-          }}
+        
+
+        <Modal
+          style={{ width: "900px", maxWidth: "100%" }}
+          isOpen={modalAdd}
+          toggle={toggle1}
         >
-          <select
-            className="form-select rounded col-sm-9 col-md-10 col-xl-10"
-            id="Defragment-select"
-            style={{ width: "80%" }}
-          >
-            <option value="Default">None Defragment</option>
-            <option value="Defragment">Defragment with Deparment</option>
-          </select>
-          <Button
-            type="button"
-            className="btn btn-outline-primary col-sm-3 col-md-2 col-xl-2"
-            style={{
-              width: "20%",
-              minWidth: "50px",
-              background: "none",
-              padding: "0px",
-            }}
-            onClick={myDefragment}
-          >
-            {" "}
-            Submit
-          </Button>
-        </div>
-      </FormGroup>
+          <AddStaff Departments={props.Departments}/>
+        </Modal>
+      </div>
+
+      {/*Sort*/}
+      <div className="col-sm-7 col-md-8 col-xl-8">
+        <select className="form-select rounded " id="Defragment-select">
+          <option value="Default">None Defragment</option>
+          <option value="Defragment">Defragment with Deparment</option>
+        </select>
+      </div>
+      <div className="col-sm-3 col-md-2 col-xl-2">
+        <Button
+          type="button"
+          className="btn btn-outline-primary"
+          style={{
+            width: "100%",
+            background: "none",
+          }}
+          onClick={myDefragment}
+        >
+          {" "}
+          Submit
+        </Button>
+      </div>
 
       {/*body*/}
       <div className="row">{DepartmentContainer}</div>
       <div className="row">Bấm vào tên Nhân Viên để xem thông tin cụ thể.</div>
+    </div>
     </div>
   );
 }
