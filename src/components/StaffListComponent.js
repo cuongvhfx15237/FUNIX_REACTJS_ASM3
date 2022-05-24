@@ -57,9 +57,10 @@ function StaffList(props, iStaffs, submitForm) {
             padding: "0px",
             border: "1px solid black",
           }}
+          key={departmentItem.id}
         >
           <div
-            key={departmentItem.id}
+            
             className="col-sm-12 col-md-3 col-xl-2"
             style={{
               padding: 1 + "em",
@@ -144,7 +145,7 @@ function StaffList(props, iStaffs, submitForm) {
           isOpen={modalAdd}
           toggle={toggle1}
         >
-          <AddStaff Departments={props.Departments}/>
+          <AddStaff Departments={props.Departments} Staffs={props.Staffs}/>
         </Modal>
       </div>
 

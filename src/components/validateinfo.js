@@ -21,11 +21,12 @@ function AddStaff(props) {
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({});
 const [isSubmit, setIsSubmit] = useState(false);
-
+  const [Staffs, setStaffs] = useState(props.Staffs)
   const handleChange = (e)=>{
     const {name, value}= e.target;
-    setFormValues({...formValues, [name]:value, image:'/assets/images/alberto.png'});
-
+    let IdArr = Staffs.map((Staff)=>(Staff.id))
+    let id = (Math.max(...IdArr) + 1)
+    setFormValues({id, ...formValues, [name]:value, image:'/assets/images/alberto.png'});
     }
   
   const handleSubmit = (event)=> {
@@ -33,6 +34,8 @@ const [isSubmit, setIsSubmit] = useState(false);
     setFormErrors(validate(formValues));
     setIsSubmit(true);
     console.log(formValues)
+    setStaffs(Staffs.push(formValues))
+    console.log(Staffs)
   }
   useEffect(()=>{
     if (Object.keys(formErrors).length === 0 && isSubmit){
@@ -53,7 +56,7 @@ const [isSubmit, setIsSubmit] = useState(false);
   }
   return (
     <div>
-      <Form onSubmit={handleSubmit}>
+      <Form className="form-container" onSubmit={handleSubmit}>
         <ModalHeader >Thông tin nhân viên</ModalHeader>
         <ModalBody>
           <FormGroup >
