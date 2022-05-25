@@ -145,7 +145,7 @@ function StaffList(props, iStaffs, submitForm) {
           isOpen={modalAdd}
           toggle={toggle1}
         >
-          <AddStaff Departments={props.Departments} Staffs={props.Staffs}/>
+          <AddStaff Departments={props.Departments} Staffs={props.Staffs} />
         </Modal>
       </div>
 

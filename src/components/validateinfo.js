@@ -17,23 +17,43 @@ function AddStaff(props) {
     const toggle1 = () => setModalAdd(!modalAdd);
 
 
-  const initialValues={fullname:'', doB:'', startDay:''}
+  const initialValues={name:'', doB:'', startDate:''}
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({});
 const [isSubmit, setIsSubmit] = useState(false);
   const [Staffs, setStaffs] = useState(props.Staffs)
   const handleChange = (e)=>{
-    const {name, value}= e.target;
+    const {name, value} = e.target
+    
     let IdArr = Staffs.map((Staff)=>(Staff.id))
     let id = (Math.max(...IdArr) + 1)
-    setFormValues({id, ...formValues, [name]:value, image:'/assets/images/alberto.png'});
+    if([name]=="department"){
+      setFormValues({id, ...formValues, ["department"]:props.Departments[e.target.value], image:'/assets/images/alberto.png'});
     }
+    else if ([name]=="doB"){
+      const day= new Date(value).toISOString();
+      setFormValues({id, ...formValues,["doB"]:day, image:'/assets/images/alberto.png'})
+    }
+    else if ([name]=="startDate"){
+      const day= new Date(value).toISOString();
+      setFormValues({id, ...formValues,["startDate"]:day, image:'/assets/images/alberto.png'})
+    }
+    else if ([name]!="name"){
+      setFormValues({id, ...formValues,[name]:parseInt(value), image:'/assets/images/alberto.png'})
+    }
+
+    else{
+    setFormValues({id, ...formValues, [name]:value, image:'/assets/images/alberto.png'});
+      
+    
+    console.log(formValues)
+    }
+  }
   
   const handleSubmit = (event)=> {
     event.preventDefault();
     setFormErrors(validate(formValues));
     setIsSubmit(true);
-    console.log(formValues)
     setStaffs(Staffs.push(formValues))
     console.log(Staffs)
   }
@@ -44,13 +64,13 @@ const [isSubmit, setIsSubmit] = useState(false);
   const validate = (values) => {
       const errors={}
       if(!values.fullnname){
-        errors.fullname="!Vui lòng nhập thông tin"
+        errors.name="!Vui lòng nhập thông tin"
       }
       if(!values.doB){
         errors.doB="!Vui lòng nhập thông tin"
       }
-      if(!values.startDay){
-        errors.startDay="!Vui lòng nhập thông tin"
+      if(!values.startDate){
+        errors.startDate="!Vui lòng nhập thông tin"
       }
       return errors
   }
@@ -66,12 +86,12 @@ const [isSubmit, setIsSubmit] = useState(false);
                 </div>
             <div className="col-sm-12 col-md-8 col-xl-9">
               <Input type="text" 
-              id="fullname" 
-              name="fullname" 
+              id="name" 
+              name="name" 
               placeholder="Họ và tên" 
-              // value={formValues.fullname}
+              // value={formValues.name}
               onBlur={handleChange} />
-              <p className="text-danger">{formErrors.fullname}</p>
+              <p className="text-danger">{formErrors.name}</p>
               </div>
               
           </FormGroup>
@@ -95,11 +115,11 @@ const [isSubmit, setIsSubmit] = useState(false);
             </div>
             <div className="col-sm-12 col-md-8 col-xl-9">
               <Input type="date" 
-              id="startDay" 
-              name="startDay" 
-              // value={formValues.startDay}
+              id="startDate" 
+              name="startDate" 
+              // value={formValues.startDate}
               onBlur={handleChange} />
-               <p  className="text-danger">{formErrors.startDay}</p>
+               <p  className="text-danger">{formErrors.startDate}</p>
               </div>
           </FormGroup>
           <FormGroup  className="row">
@@ -107,9 +127,10 @@ const [isSubmit, setIsSubmit] = useState(false);
             <Label>Phòng ban</Label>
             </div>
           <div className="col-sm-12 col-md-8 col-xl-9">
-            <Input type="select"  onBlur={handleChange} name="Department">
+            <Input type="select"  onBlur={handleChange} name="department">
               {props.Departments.map((department)=>{
-                  return( <option key={props.Departments.indexOf(department)}>
+                  return( 
+                  <option key={props.Departments.indexOf(department)} value={props.Departments.indexOf(department)}>
                     {department.name}
                   </option>)
               })}
@@ -128,7 +149,8 @@ const [isSubmit, setIsSubmit] = useState(false);
           <div className="col-sm-12 col-md-4 col-xl-3">
             <Label>Số ngày nghỉ còn lại</Label>
             </div>
-          <div className="col-sm-12 col-md-8 col-xl-9"><Input type="text" defaultValue={0}  onBlur={handleChange} name="annualLeave"/></div>
+          <div className="col-sm-12 col-md-8 col-xl-9">
+            <Input type="text" defaultValue={0}  onBlur={handleChange} name="annualLeave"/></div>
           </FormGroup>
           <FormGroup  className="row">
           <div className="col-sm-12 col-md-4 col-xl-3">
@@ -141,7 +163,7 @@ const [isSubmit, setIsSubmit] = useState(false);
           </FormGroup>
         </ModalBody>
         <ModalFooter>
-          <Button type="submit" color="primary" >
+          <Button type="submit" color="primary" onClick={toggle1}>
             Thêm
           </Button>
         </ModalFooter>
