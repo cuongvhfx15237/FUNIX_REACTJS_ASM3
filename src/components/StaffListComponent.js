@@ -1,101 +1,51 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardImg, CardTitle, Form, FormGroup, Label, Input, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import useForm from "./Validator";
 import "../index.css";
-import validate from "./validateinfo";
 import { Link } from "react-router-dom";
 import { Button, Modal } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import AddStaff from "./validateinfo";
+import {useForm} from "react-hook-form";
 
 function StaffList(props, iStaffs, submitForm) {
   const [modalAdd, setModalAdd] = useState(false);
   const toggle1 = () => setModalAdd(!modalAdd);
+ window.addEventListener('DOMContentLoaded', (e) =>{
+const  form = document.getElementById("form-container");
+console.log(form)
+const name = document.getElementById("name");
+console.log(name)
+const DoB = document.getElementById("doB");
+console.log(DoB)
+const Start = document.getElementById("startDate");
+console.log(Start)
 
-  const initialValues = { name: "", doB: "", startDate: "" };
-  const [formValues, setFormValues] = useState(initialValues);
-  const [formErrors, setFormErrors] = useState({});
-  const [isSubmit, setIsSubmit] = useState(false);
-  const [Staffs, setStaffs] = useState(props.Staffs);
-  const handleChange = (e) => {
-    e.preventDefault();
-    setFormErrors(validate(formValues));
-  };
+  e.preventDefault();
+  checkInputs();
+ 
 
-  const handleSubmit = (event) => {
-    const HTMLCollection = document.querySelectorAll("form input");
-    console.log(HTMLCollection)
-    let i=0;
-    for (i; i<HTMLCollection.length; i++){
-      const { name, value } = document.getElementsByTagName("input")[i];
-      console.log(document.getElementsByTagName("input")[i])
-      let IdArr = Staffs.map((Staff) => Staff.id);
-      let id = Math.max(...IdArr) + 1;
-      if ([name] == "department") {
-        setFormValues({
-          id,
-          ...formValues,
-          ["department"]: props.Departments[event.target.value],
-          image: "/assets/images/alberto.png",
-        });
-      } else if ([name] == "doB") {
-        const day = new Date(value).toISOString();
-        setFormValues({
-          id,
-          ...formValues,
-          ["doB"]: day,
-          image: "/assets/images/alberto.png",
-        });
-      } else if ([name] == "startDate") {
-        const day = new Date(value).toISOString();
-        setFormValues({
-          id,
-          ...formValues,
-          ["startDate"]: day,
-          image: "/assets/images/alberto.png",
-        });
-      } else if ([name] != "name") {
-        setFormValues({
-          id,
-          ...formValues,
-          [name]: parseInt(value),
-          image: "/assets/images/alberto.png",
-        });
-      } else {
-        setFormValues({
-          id,
-          ...formValues,
-          [name]: value,
-          image: "/assets/images/alberto.png",
-        });
-      }
-    }
-    setIsSubmit(true);
-    setStaffs(Staffs.push(formValues));
-    console.log(formValues)
-  };
-  useEffect(() => {
-    if (Object.keys(formErrors).length === 0 && isSubmit) {
-    }
-  }, [formErrors]);
-  const validate = (values) => {
-    const errors = {};
-    if (!values.fullname) {
-      errors.name = "!Vui lòng nhập thông tin";
-    }
-    if (!values.doB) {
-      errors.doB = "!Vui lòng nhập thông tin";
-    }
-    if (!values.startDate) {
-      errors.startDate = "!Vui lòng nhập thông tin";
-    }
-    return errors;
-  };
+function checkInputs(){
+  const NameValue = name.value.trim();
+  const DoBValue = DoB.value;
+  const StartDateValue = Start.value;
+  if (NameValue ===""){
+      setErrorFor(name, "Vui lòng nhập thông tin");
+  }
+  else{
+      setSuccessFor(name)
+  }
+}
+function setErrorFor(input, message){
+  const formControl = input.parentElement;
+  const Span = formControl.querySelector("span")
+  Span.innerText = message;
 
-
-
-
-
+  formControl.className = "form-control error"
+}
+  function setSuccessFor(input){
+    const formControl = input.parentElement;
+    formControl.className = "form-control success"
+  }
+})
 
   function RenderStaffList({ Staff }) {
     //render  list staff with image and name;
@@ -230,59 +180,46 @@ function StaffList(props, iStaffs, submitForm) {
           toggle={toggle1}
         >
            <div>
-      <Form className="form-container" onSubmit={handleSubmit}>
+      <Form className="form-container" id="form-container" >
         <ModalHeader>Thông tin nhân viên</ModalHeader>
-        <ModalBody>
-          <FormGroup>
-            <FormGroup className="row">
-              <div className="col-sm-12 col-md-4 col-xl-3">
-                <Label>Họ Và Tên</Label>
-              </div>
-              <div className="col-sm-12 col-md-8 col-xl-9">
+        <ModalBody >
+            <FormGroup className="row" id="form-group">
+                <Label className="col-sm-12 col-md-4 col-xl-3" for="name">Họ Và Tên</Label>
                 <Input
+                className="col-sm-12 col-md-8 col-xl-9"
                   type="text"
                   id="name"
                   name="name"
                   placeholder="Họ và tên"
-                  // onBlur={handleChange}
+                 
                 />
-                <p className="text-danger">{formErrors.name}</p>
-              </div>
+                <span className="form-message"></span>
             </FormGroup>
-            <FormGroup className="row">
-              <div className="col-sm-12 col-md-4 col-xl-3">
-                <Label>Ngày Sinh</Label>
-              </div>
-              <div className="col-sm-12 col-md-8 col-xl-9">
+            <FormGroup className="row" id="form-group">
+                <Label className="col-sm-12 col-md-4 col-xl-3" for="doB">Ngày Sinh</Label>
                 <Input
+                  className="col-sm-12 col-md-8 col-xl-9"
                   type="date"
                   id="doB"
                   name="doB"
-                  // onBlur={handleChange}
+                 
                 />
-                <p className="text-danger">{formErrors.doB}</p>
-              </div>
+               <span className="form-message"></span>
             </FormGroup>
-            <FormGroup className="row">
-              <div className="col-sm-12 col-md-4 col-xl-3">
-                <Label>Ngày vào công ty</Label>
-              </div>
-              <div className="col-sm-12 col-md-8 col-xl-9">
+            <FormGroup className="row" id="form-group">
+                <Label className="col-sm-12 col-md-4 col-xl-3" for="startDate">Ngày vào công ty</Label>
                 <Input
+                  className="col-sm-12 col-md-8 col-xl-9"
                   type="date"
                   id="startDate"
                   name="startDate"
-                  // onBlur={handleChange}
+                
                 />
-                <p className="text-danger">{formErrors.startDate}</p>
-              </div>
+                <span className="form-message"></span>
             </FormGroup>
-            <FormGroup className="row">
-              <div className="col-sm-12 col-md-4 col-xl-3">
-                <Label>Phòng ban</Label>
-              </div>
-              <div className="col-sm-12 col-md-8 col-xl-9">
-                <Input type="select" name="department">
+            <FormGroup className="row" id="form-group">
+                <Label className="col-sm-12 col-md-4 col-xl-3" for="department">Phòng ban</Label>
+                <Input className="col-sm-12 col-md-8 col-xl-9" type="select" name="department">
                   {props.Departments.map((department) => {
                     return (
                       <option
@@ -294,45 +231,35 @@ function StaffList(props, iStaffs, submitForm) {
                     );
                   })}
                 </Input>
-              </div>
             </FormGroup>
-            <FormGroup className="row">
-              <div className="col-sm-12 col-md-4 col-xl-3">
-                <Label>Hệ số lương</Label>
-              </div>
-              <div className="col-sm-12 col-md-8 col-xl-9">
+            <FormGroup className="row" id="form-group">
+                <Label className="col-sm-12 col-md-4 col-xl-3" for="salaryScale">Hệ số lương</Label>
                 <Input
+                  className="col-sm-12 col-md-8 col-xl-9"
                   type="number"
-                  defaultValue={1} 
+                  defaultValue={1}
                   name="salaryScale"
                 />
-              </div>
             </FormGroup>
-            <FormGroup className="row">
-              <div className="col-sm-12 col-md-4 col-xl-3">
-                <Label>Số ngày nghỉ còn lại</Label>
-              </div>
-              <div className="col-sm-12 col-md-8 col-xl-9">
+            <FormGroup className="row" id="form-group">
+                <Label className="col-sm-12 col-md-4 col-xl-3">Số ngày nghỉ còn lại</Label>
                 <Input
+                  className="col-sm-12 col-md-8 col-xl-9"
                   type="number"
                   defaultValue={0}
                   name="annualLeave"
                 />
-              </div>
             </FormGroup>
-            <FormGroup className="row">
-              <div className="col-sm-12 col-md-4 col-xl-3">
-                <Label>Số ngày làm thêm</Label>
-              </div>
-              <div className="col-sm-12 col-md-8 col-xl-9">
+            <FormGroup className="row" id="form-group">
+                <Label className="col-sm-12 col-md-4 col-xl-3">Số ngày làm thêm</Label>
                 <Input
+                  className="col-sm-12 col-md-8 col-xl-9"
                   type="number"
                   defaultValue={0}
                   name="overTime"
                 />
-              </div>
             </FormGroup>
-          </FormGroup>
+
         </ModalBody>
         <ModalFooter>
           <Button type="submit" color="primary" onClick={toggle1}>
