@@ -1,51 +1,88 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardImg, CardTitle, Form, FormGroup, Label, Input, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { Card, CardImg, CardTitle, Form, FormGroup, Label, Input, ModalHeader, ModalBody, ModalFooter, FormFeedback } from "reactstrap";
 import "../index.css";
 import { Link } from "react-router-dom";
 import { Button, Modal } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {useForm} from "react-hook-form";
 
 function StaffList(props, iStaffs, submitForm) {
   const [modalAdd, setModalAdd] = useState(false);
   const toggle1 = () => setModalAdd(!modalAdd);
- window.addEventListener('DOMContentLoaded', (e) =>{
-const  form = document.getElementById("form-container");
-console.log(form)
-const name = document.getElementById("name");
-console.log(name)
-const DoB = document.getElementById("doB");
-console.log(DoB)
-const Start = document.getElementById("startDate");
-console.log(Start)
 
-  e.preventDefault();
-  checkInputs();
- 
+  const [name, setName]= useState("");
+  const [doB, setDoB]= useState("");
+  const [startDate, setStartDate]= useState("");
+  const [department, setDepartment]= useState("Sale");
+  const [salaryScale, setSalaryScale]= useState("1");
+  const [annualLeave, setAnnualLeave]= useState("0");
+  const [overTime, setOverTime]= useState("0");
+  const [image, setImage] = useState("/assets/images/alberto.png");
+  const [touched, setTouched] = useState({
+              name: false,
+              doB: false,
+              startDate: false,
+              salaryScale: false,
+              department: false,
+              annualLeave: false,
+              overTime: false,
+  })
+  function handleBlur(field){
+  
+      setStartDate({
+        touched: {...touched, [field]: true}
+      })
 
-function checkInputs(){
-  const NameValue = name.value.trim();
-  const DoBValue = DoB.value;
-  const StartDateValue = Start.value;
-  if (NameValue ===""){
-      setErrorFor(name, "Vui lòng nhập thông tin");
   }
-  else{
-      setSuccessFor(name)
-  }
-}
-function setErrorFor(input, message){
-  const formControl = input.parentElement;
-  const Span = formControl.querySelector("span")
-  Span.innerText = message;
+  function handleInputChange(event){
+    const target=event.target;
+    const value=target.value;
+    const name=target.name;
+    setStartDate({
+      [name]: value
+    })
 
-  formControl.className = "form-control error"
-}
-  function setSuccessFor(input){
-    const formControl = input.parentElement;
-    formControl.className = "form-control success"
   }
-})
+  function handleSubmit(){
+    const newStaff = {
+      name: name,
+      doB: doB,
+      startDate: startDate,
+      department: department,
+      salaryScale: salaryScale,
+      annualLeave: annualLeave,
+      overTime: overTime,
+      image: image
+    }
+    // onAdd
+  }
+ function validate(name, doB, startDate, department, salaryScale, annualLeave, overTime){
+   const errors = {
+     name:"",
+     doB:"",
+     startDate:"",
+     department:"",
+     salaryScale:"",
+     annualLeave:"",
+     overTime:"",
+   };
+   if (touched.name && name.length <3){
+   errors.name = "name should be >=3 chars";}
+  else if ( touched.name && name.length>50){
+  errors.name = " name should be <= 50 chars";}
+  if (touched.department && department.length <1){
+  errors.department = "Vui lòng nhập thông tin"}
+  if (touched.salaryScale && salaryScale.length <1){
+  errors.salaryScale = "Vui lòng nhập thông tin"}
+  if (touched.annualLeave && annualLeave.length <1){
+  errors.annualLeave = "Vui lòng nhập thông tin"}
+  if (touched.overTime && overTime.length <1){
+  errors.overTime = "Vui lòng nhập thông tin"}
+  if (touched.startDate && startDate.length <1){
+  errors.startDate = "Vui lòng nhập thông tin"}
+  if (touched.doB && doB.length <1){
+  errors.doB = "Vui lòng nhập thông tin";}
+  return errors;
+  }
 
   function RenderStaffList({ Staff }) {
     //render  list staff with image and name;
@@ -191,9 +228,13 @@ function setErrorFor(input, message){
                   id="name"
                   name="name"
                   placeholder="Họ và tên"
-                 
+                  value={name}
+                  valid={errors.name===""}
+                  invalid ={errors.name !==""}
+                  onBlur={handleBlur("name")}
+                  onChange={handleInputChange}
                 />
-                <span className="form-message"></span>
+                <FormFeedback>{errors.name}</FormFeedback>
             </FormGroup>
             <FormGroup className="row" id="form-group">
                 <Label className="col-sm-12 col-md-4 col-xl-3" for="doB">Ngày Sinh</Label>
@@ -202,9 +243,13 @@ function setErrorFor(input, message){
                   type="date"
                   id="doB"
                   name="doB"
-                 
+                  value={doB}
+                  valid={errors.doB===""}
+                  invalid ={errors.doB !==""}
+                  onBlur={handleBlur("doB")}
+                  onChange={handleInputChange}
                 />
-               <span className="form-message"></span>
+               <FormFeedback>{errors.doB}</FormFeedback>
             </FormGroup>
             <FormGroup className="row" id="form-group">
                 <Label className="col-sm-12 col-md-4 col-xl-3" for="startDate">Ngày vào công ty</Label>
@@ -213,9 +258,13 @@ function setErrorFor(input, message){
                   type="date"
                   id="startDate"
                   name="startDate"
-                
+                  value={startDate}
+                  valid={errors.startDate===""}
+                  invalid ={errors.startDate !==""}
+                  onBlur={handleBlur("startDate")}
+                  onChange={handleInputChange}
                 />
-                <span className="form-message"></span>
+                <FormFeedback>{errors.startDate}</FormFeedback>
             </FormGroup>
             <FormGroup className="row" id="form-group">
                 <Label className="col-sm-12 col-md-4 col-xl-3" for="department">Phòng ban</Label>
