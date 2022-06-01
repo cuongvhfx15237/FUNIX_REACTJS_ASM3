@@ -40,37 +40,32 @@ function StaffList(props, iStaffs, submitForm) {
       overTime: false,
     }
   })
-  // const [name, setName] = useState("");
-  // const [doB, setDoB] = useState("");
-  // const [startDate, setStartDate] = useState("");
-  // const [department, setDepartment] = useState("Sale");
-  // const [salaryScale, setSalaryScale] = useState("1");
-  // const [annualLeave, setAnnualLeave] = useState("0");
-  // const [overTime, setOverTime] = useState("0");
-  // const [image, setImage] = useState("/assets/images/alberto.png");
-  // const [touched, setTouched] = useState({
-  //   name: false,
-  //   doB: false,
-  //   startDate: false,
-  //   salaryScale: false,
-  //   department: false,
-  //   annualLeave: false,
-  //   overTime: false,
-  // });
-  const handleBlur=(field)=> (event)=> {
-      event.preventDefault();
-    setState({ 
-      touched: {[event] : true },
-    });
+
+  const handleBlur =  (e)=> {
+      e.preventDefault();
+      debugger
+    //   console.log(e.target.name)
+    //   console.log(e.target.value)
+    // if ([field] === "name"){
+    //   if (e.target.value<3){
+    //     return console.log(" phải lớn hơn 3 ký tự")
+    //   }
+    // }
+    // if ({field} !== "name"){
+    //   if (e.target.value===""){
+    //     return console.log(" vui lòng nhập đúng ngày tháng năm")
+    //   }
+    // }
   }
-  function handleInputChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-    setState({
-      [name]: value,
-    });
-  }
+
+  // function handleInputChange(event) {
+  //   const target = event.target;
+  //   const value = target.value;
+  //   const name = target.name;
+  //   setState({
+  //     [name]: value,
+  //   });
+  // }
   // function handleSubmit() {
   //   const newStaff = {
   //     name: name,
@@ -84,59 +79,30 @@ function StaffList(props, iStaffs, submitForm) {
   //   };
     // onAdd
   // }
-  function validate(
-    name,
-    doB,
-    startDate,
-    department,
-    salaryScale,
-    annualLeave,
-    overTime, touched
-  ) {
-    const errors = {
-      name: "",
-      doB: "",
-      startDate: "",
-      department: "",
-      salaryScale: "",
-      annualLeave: "",
-      overTime: "",
-      touched: {
-        name: false,
-        doB: false,
-        startDate: false, 
-        salaryScale: false,
-        department: false,
-        annualLeave: false,
-        overTime: false,
+ const validate = ( event) => {
+   const errors = {
+     name:"",
+     doB:"",
+     startDate:"",}
+      event.preventDefault();
+      if (event.target.name==="name" ){
+       if(event.target.value===""){
+        errors.name="Yêu cầu nhập tên"
       }
-     };
-    if (errors.touched.name && name.length < 3) {
-      errors.name = "name should be >=3 chars";
-    } else if (errors.touched.name && name.length > 50) {
-      errors.name = " name should be <= 50 chars";
+      else if (event.target.value.length<3){
+        errors.name="Tên phải có nhiều hơn 3 ký tự"
+      }    
     }
-    if (errors.touched.department && department.length < 1) {
-      errors.department = "Vui lòng nhập thông tin";
-    }
-    if (errors.touched.salaryScale && salaryScale.length < 1) {
-      errors.salaryScale = "Vui lòng nhập thông tin";
-    }
-    if (errors.touched.annualLeave && annualLeave.length < 1) {
-      errors.annualLeave = "Vui lòng nhập thông tin";
-    }
-    if (errors.touched.overTime && overTime.length < 1) {
-      errors.overTime = "Vui lòng nhập thông tin";
-    }
-    if (errors.touched.startDate && startDate.length < 1) {
-      errors.startDate = "Vui lòng nhập thông tin";
-    }
-    if (errors.touched.doB && doB.length < 1) {
-      errors.doB = "Vui lòng nhập thông tin";
+    if (event.target.name !=="name"){
+      if(event.target.value===""){
+        errors[event.target.name]="Vui long nhap ngay thang"
+      }
     }
     debugger
-    return errors;
-  }
+    return errors
+   }
+
+   
 
   function RenderStaffList({ Staff }) {
     //render  list staff with image and name;
@@ -226,8 +192,6 @@ function StaffList(props, iStaffs, submitForm) {
       });
     }
   });
-  const errors=validate()
-  debugger
 
   return (
     <div className="container-fluid">
@@ -285,12 +249,12 @@ function StaffList(props, iStaffs, submitForm) {
                       name="name"
                       placeholder="Họ và tên"
                       // defaultValue={name}
-                      valid={errors.name === ""}
-                      invalid={errors.name !== ""}
-                      onBlur={handleBlur()}
+                      // valid={errors.name === ""}
+                      // invalid={errors.name !== ""}
+                      onBlur={handleBlur}
                       // onChange={handleInputChange}
                     />
-                    <FormFeedback>{errors.name}</FormFeedback>
+                    <FormFeedback>{validate.name}</FormFeedback>
                   </FormGroup>
                   <FormGroup className="row" id="form-group">
                     <Label className="col-sm-12 col-md-4 col-xl-3" for="doB">
@@ -302,12 +266,12 @@ function StaffList(props, iStaffs, submitForm) {
                       id="doB"
                       name="doB"
                       // value={doB}
-                      valid={errors.doB === ""}
-                      invalid={errors.doB !== ""}
-                      onBlur={handleBlur("doB")}
+                      // valid={errors.doB === ""}
+                      // invalid={errors.doB !== ""}
+                      onBlur={handleBlur}
                       // onChange={handleInputChange}
                     />
-                    <FormFeedback>{errors.doB}</FormFeedback>
+                    {/* <FormFeedback>{errors.doB}</FormFeedback> */}
                   </FormGroup>
                   <FormGroup className="row" id="form-group">
                     <Label
@@ -321,13 +285,13 @@ function StaffList(props, iStaffs, submitForm) {
                       type="date"
                       id="startDate"
                       name="startDate"
-                      // value={startDate}
-                      valid={errors.startDate === ""}
-                      invalid={errors.startDate !== ""}
-                      onBlur={handleBlur("startDate")}
+                      // // value={startDate}
+                      // valid={errors.startDate === ""}
+                      // invalid={errors.startDate !== ""}
+                      onBlur={handleBlur}
                       // onChange={handleInputChange}
                     />
-                    <FormFeedback>{errors.startDate}</FormFeedback>
+                    {/* <FormFeedback>{errors.startDate}</FormFeedback> */}
                   </FormGroup>
                   <FormGroup className="row" id="form-group">
                     <Label
