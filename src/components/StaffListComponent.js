@@ -18,10 +18,10 @@ import { Button, Modal } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function StaffList(props, iStaffs, submitForm) {
-  const [modalAdd, setModalAdd] = useState(false);
-  const toggle1 = () => setModalAdd(!modalAdd);
 
-  const [state, setState] = useState({
+  const [itemStaff, setItemstaff] = useState({
+    modalAdd: false,
+    id:"",
     name:"",
     doB: "",
     startDate:"",
@@ -41,66 +41,104 @@ function StaffList(props, iStaffs, submitForm) {
     }
   })
 
-  const handleBlur =  (e)=> {
-      e.preventDefault();
-      debugger
-    //   console.log(e.target.name)
-    //   console.log(e.target.value)
-    // if ([field] === "name"){
-    //   if (e.target.value<3){
-    //     return console.log(" phải lớn hơn 3 ký tự")
-    //   }
-    // }
-    // if ({field} !== "name"){
-    //   if (e.target.value===""){
-    //     return console.log(" vui lòng nhập đúng ngày tháng năm")
-    //   }
-    // }
+  function toggleModal(){
+    setItemstaff({
+      modalAdd: !itemStaff.modalAdd,
+      id:"",
+      name:"",
+      doB: "",
+      startDate:"",
+      department:"Sale",
+      salaryScale:1,
+      annualLeave:0,
+      overTime:0,
+      imate:"/assets/images/alberto.png",
+      touched: {
+        name: false,
+        doB: false,
+        startDate: false,
+        salaryScale: false,
+        department: false,
+        annualLeave: false,
+        overTime: false,
+      }
+    })
   }
 
-  // function handleInputChange(event) {
-  //   const target = event.target;
-  //   const value = target.value;
-  //   const name = target.name;
-  //   setState({
-  //     [name]: value,
-  //   });
+  const handleBlur = (field) =>  (e) => {
+    setItemstaff({
+        ...itemStaff,
+        touched: { ...itemStaff.touched, [field]: true}
+    })
+  };
+
+
+  function handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    setItemstaff({...itemStaff,
+      [name]: value,
+    });
+  }
+  const handleSubmit = (e) =>{
+    e.preventDefault();
+   const target = document.querySelectorAll("form input, form select")
+   console.log (target)
+   for (let i = 0; i<target.length; i++){
+ 
+     if (target[i].name ==="name"){
+        setItemstaff({...itemStaff,
+        name: target[i].value})
+        console.log(target[i].value)
+     }
+  //    else if (target[i].name ==="doB"){
+  //      console.log(target[i].value)
+  //      const day = (new Date(target[i].value)).toISOString()
+  //     setItemstaff({...itemStaff,
+  //     doB: day})
+  //     console.log(day)
+  //  }}
+  //  else if (target[i].name ==="startDate"){
+  //   const day = target[i].value.toISOString();
+  //  setItemstaff({...itemStaff,
+  //  startDate: day})
+  //  console.log(day)
   // }
-  // function handleSubmit() {
-  //   const newStaff = {
-  //     name: name,
-  //     doB: doB,
-  //     startDate: startDate,
-  //     department: department,
-  //     salaryScale: salaryScale,
-  //     annualLeave: annualLeave,
-  //     overTime: overTime,
-  //     image: image,
-  //   };
+  // else if (target[i].name ==="department"){
+  //   let Index = target[i].value.toISOString()
+  //  setItemstaff({...itemStaff,
+  //  doB: day})
+  //  console.log(day)
+   }}
     // onAdd
-  // }
- const validate = ( event) => {
-   const errors = {
-     name:"",
-     doB:"",
-     startDate:"",}
-      event.preventDefault();
-      if (event.target.name==="name" ){
-       if(event.target.value===""){
-        errors.name="Yêu cầu nhập tên"
-      }
-      else if (event.target.value.length<3){
-        errors.name="Tên phải có nhiều hơn 3 ký tự"
-      }    
+  
+
+ function validate(){
+    const errors = {
+      name:"",
+      department:"",
+      doB:"",
+      startDate:"",
+      salaryScale:"",
+      annualLeave:"",
+      overTime:"",
+    };
+
+    if (itemStaff.touched.name && itemStaff.name.length < 3){
+      errors.name = "Tên phải có hơn 3 ký tự"
     }
-    if (event.target.name !=="name"){
-      if(event.target.value===""){
-        errors[event.target.name]="Vui long nhap ngay thang"
-      }
+    else if (itemStaff.touched.name && itemStaff.name.length > 50){
+      errors.name = "Tên phải có it hơn 50 ký tự"
     }
-    debugger
-    return errors
-   }
+    if (itemStaff.touched.doB && itemStaff.doB===""){
+      errors.doB = "Yêu cầu nhập thông tin ngày tháng"
+    }
+    if (itemStaff.touched.startDate && itemStaff.startDate===""){
+      errors.startDate = "Yêu cầu nhập thông tin ngày tháng"
+    }
+    return errors;
+ }
 
    
 
@@ -192,7 +230,7 @@ function StaffList(props, iStaffs, submitForm) {
       });
     }
   });
-
+const errors = validate(itemStaff.name, itemStaff.doB, itemStaff.startDate, itemStaff.department, itemStaff.salaryScale, itemStaff.annualLeave, itemStaff.overTime);
   return (
     <div className="container-fluid">
       <div className="row">
@@ -225,17 +263,17 @@ function StaffList(props, iStaffs, submitForm) {
       {/*add Staff*/}
       <div className="row">
         <div className="col-sm-2 col-md-2 col-xl-2">
-          <Button color="primary" onClick={toggle1}>
+          <Button color="primary" onClick={toggleModal}>
             ADD
           </Button>
 
           <Modal
             style={{ width: "900px", maxWidth: "100%" }}
-            isOpen={modalAdd}
-            toggle={toggle1}
+            isOpen={itemStaff.modalAdd}
+            toggle={toggleModal}
           >
             <div>
-              <Form className="form-container" id="form-container">
+              <Form className="form-container" id="form-container" onSubmit={handleSubmit}>
                 <ModalHeader>Thông tin nhân viên</ModalHeader>
                 <ModalBody>
                   <FormGroup className="row" id="form-group">
@@ -248,13 +286,13 @@ function StaffList(props, iStaffs, submitForm) {
                       id="name"
                       name="name"
                       placeholder="Họ và tên"
-                      // defaultValue={name}
-                      // valid={errors.name === ""}
-                      // invalid={errors.name !== ""}
-                      onBlur={handleBlur}
-                      // onChange={handleInputChange}
+                      value={itemStaff.name}
+                      valid={errors.name === ""}
+                      invalid={errors.name !== ""}
+                      onBlur={handleBlur("name")}
+                      onChange={handleInputChange}
                     />
-                    <FormFeedback>{validate.name}</FormFeedback>
+                    <FormFeedback>{errors.name}</FormFeedback>
                   </FormGroup>
                   <FormGroup className="row" id="form-group">
                     <Label className="col-sm-12 col-md-4 col-xl-3" for="doB">
@@ -265,13 +303,13 @@ function StaffList(props, iStaffs, submitForm) {
                       type="date"
                       id="doB"
                       name="doB"
-                      // value={doB}
-                      // valid={errors.doB === ""}
-                      // invalid={errors.doB !== ""}
-                      onBlur={handleBlur}
-                      // onChange={handleInputChange}
+                      value={itemStaff.doB}
+                      valid={errors.doB === ""}
+                      invalid={errors.doB !== ""}
+                      onBlur={handleBlur("doB")}
+                      onChange={handleInputChange}
                     />
-                    {/* <FormFeedback>{errors.doB}</FormFeedback> */}
+                    <FormFeedback>{errors.doB}</FormFeedback>
                   </FormGroup>
                   <FormGroup className="row" id="form-group">
                     <Label
@@ -285,13 +323,13 @@ function StaffList(props, iStaffs, submitForm) {
                       type="date"
                       id="startDate"
                       name="startDate"
-                      // // value={startDate}
-                      // valid={errors.startDate === ""}
-                      // invalid={errors.startDate !== ""}
-                      onBlur={handleBlur}
-                      // onChange={handleInputChange}
+                      value={itemStaff.startDate}
+                      valid={errors.startDate === ""}
+                      invalid={errors.startDate !== ""}
+                      onBlur={handleBlur("startDate")}
+                      onChange={handleInputChange}
                     />
-                    {/* <FormFeedback>{errors.startDate}</FormFeedback> */}
+                    <FormFeedback>{errors.startDate}</FormFeedback>
                   </FormGroup>
                   <FormGroup className="row" id="form-group">
                     <Label
@@ -355,7 +393,7 @@ function StaffList(props, iStaffs, submitForm) {
                   </FormGroup>
                 </ModalBody>
                 <ModalFooter>
-                  <Button type="submit" color="primary" onClick={toggle1}>
+                  <Button type="submit" color="primary" onClick={toggleModal}>
                     Thêm
                   </Button>
                 </ModalFooter>
