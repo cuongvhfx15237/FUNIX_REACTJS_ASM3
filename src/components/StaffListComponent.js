@@ -17,11 +17,9 @@ import { Link } from "react-router-dom";
 import { Button, Modal } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function StaffList(props, iStaffs, submitForm) {
-
-  const [itemStaff, setItemstaff] = useState({
-    modalAdd: false,
-    id:"",
+function StaffList(props, iStaffs) {
+  const [modalAdd, setModalAdd] = useState(false)
+  const [itemStaff, setItemStaff] = useState({
     name:"",
     doB: "",
     startDate:"",
@@ -42,31 +40,15 @@ function StaffList(props, iStaffs, submitForm) {
   })
 
   function toggleModal(){
-    setItemstaff({
-      modalAdd: !itemStaff.modalAdd,
-      id:"",
-      name:"",
-      doB: "",
-      startDate:"",
-      department:"Sale",
-      salaryScale:1,
-      annualLeave:0,
-      overTime:0,
-      imate:"/assets/images/alberto.png",
-      touched: {
-        name: false,
-        doB: false,
-        startDate: false,
-        salaryScale: false,
-        department: false,
-        annualLeave: false,
-        overTime: false,
-      }
-    })
+    debugger
+    setModalAdd(
+    !modalAdd,
+    )
   }
 
   const handleBlur = (field) =>  (e) => {
-    setItemstaff({
+    e.preventDefault();
+    setItemStaff({
         ...itemStaff,
         touched: { ...itemStaff.touched, [field]: true}
     })
@@ -74,44 +56,30 @@ function StaffList(props, iStaffs, submitForm) {
 
 
   function handleInputChange(event) {
+    event.preventDefault();
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    setItemstaff({...itemStaff,
+    setItemStaff({...itemStaff,
       [name]: value,
     });
+    console.log(itemStaff);
   }
-  const handleSubmit = (e) =>{
-    e.preventDefault();
-   const target = document.querySelectorAll("form input, form select")
-   console.log (target)
-   for (let i = 0; i<target.length; i++){
- 
-     if (target[i].name ==="name"){
-        setItemstaff({...itemStaff,
-        name: target[i].value})
-        console.log(target[i].value)
-     }
-  //    else if (target[i].name ==="doB"){
-  //      console.log(target[i].value)
-  //      const day = (new Date(target[i].value)).toISOString()
-  //     setItemstaff({...itemStaff,
-  //     doB: day})
-  //     console.log(day)
-  //  }}
-  //  else if (target[i].name ==="startDate"){
-  //   const day = target[i].value.toISOString();
-  //  setItemstaff({...itemStaff,
-  //  startDate: day})
-  //  console.log(day)
-  // }
-  // else if (target[i].name ==="department"){
-  //   let Index = target[i].value.toISOString()
-  //  setItemstaff({...itemStaff,
-  //  doB: day})
-  //  console.log(day)
-   }}
-    // onAdd
+  const handleSubmit = (event) =>{
+    event.preventDefault();
+    const newStaff = {
+      name: itemStaff.name,
+      doB: itemStaff.doB,
+      startDate: itemStaff.startDate,
+      department: itemStaff.department,
+      salaryScale: itemStaff.salaryScale,
+      annualLeave: itemStaff.annualLeave,
+      overTime: itemStaff.overTime,
+      image: "/assets/images/alberto.png",
+      testsend:"done club"
+    };
+      props.onAdd(newStaff)
+  }
   
 
  function validate(){
@@ -158,6 +126,7 @@ function StaffList(props, iStaffs, submitForm) {
   //params : iStaff
   const [searchName, setSearchName] = useState("");
   const mySearch = () => {
+    debugger
     setSearchName(document.getElementById("SearchName").value);
   };
   if (searchName === "") {
@@ -171,11 +140,12 @@ function StaffList(props, iStaffs, submitForm) {
   //Defragment
   const [Defragment, setDefragment] = useState("");
   const myDefragment = () => {
+
     setDefragment(document.getElementById("Defragment-select").value);
   };
   const DepartmentContainer = props.Departments.map((departmentItem) => {
     const Staffs = iStaffs.filter(
-      (iStaff) => iStaff.department.name == departmentItem.name
+      (iStaff) => iStaff.department.name === departmentItem.name
     );
     if (Defragment === "Defragment") {
       return (
@@ -217,7 +187,9 @@ function StaffList(props, iStaffs, submitForm) {
         </div>
       );
     } else {
+
       return Staffs.map((Staff) => {
+
         return (
           <div
             key={Staff.id}
@@ -269,11 +241,10 @@ const errors = validate(itemStaff.name, itemStaff.doB, itemStaff.startDate, item
 
           <Modal
             style={{ width: "900px", maxWidth: "100%" }}
-            isOpen={itemStaff.modalAdd}
-            toggle={toggleModal}
+            isOpen={modalAdd}
           >
             <div>
-              <Form className="form-container" id="form-container" onSubmit={handleSubmit}>
+              <Form className="form-container" id="form-container" onSubmit={(value)=> handleSubmit(value)}>
                 <ModalHeader>Thông tin nhân viên</ModalHeader>
                 <ModalBody>
                   <FormGroup className="row" id="form-group">
@@ -342,6 +313,7 @@ const errors = validate(itemStaff.name, itemStaff.doB, itemStaff.startDate, item
                       className="col-sm-12 col-md-8 col-xl-9"
                       type="select"
                       name="department"
+                      onChange={handleInputChange}
                     >
                       {props.Departments.map((department) => {
                         return (
@@ -367,6 +339,7 @@ const errors = validate(itemStaff.name, itemStaff.doB, itemStaff.startDate, item
                       type="number"
                       defaultValue={1}
                       name="salaryScale"
+                      onChange={handleInputChange}
                     />
                   </FormGroup>
                   <FormGroup className="row" id="form-group">
@@ -378,6 +351,7 @@ const errors = validate(itemStaff.name, itemStaff.doB, itemStaff.startDate, item
                       type="number"
                       defaultValue={0}
                       name="annualLeave"
+                      onChange={handleInputChange}
                     />
                   </FormGroup>
                   <FormGroup className="row" id="form-group">
@@ -389,6 +363,7 @@ const errors = validate(itemStaff.name, itemStaff.doB, itemStaff.startDate, item
                       type="number"
                       defaultValue={0}
                       name="overTime"
+                      onChange={handleInputChange}
                     />
                   </FormGroup>
                 </ModalBody>

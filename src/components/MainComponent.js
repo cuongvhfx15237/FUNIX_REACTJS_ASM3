@@ -18,6 +18,16 @@ class Main extends Component {
       Staffs: STAFFS,
       Departments: DEPARTMENTS,
     };
+    this.addStaff= this.addStaff.bind(this);
+  }
+
+  addStaff = (staffAdd) =>{
+    const idF = this.state.Staffs.map((staff)=>staff.id);
+    const id = Math.max(...idF) + 1;
+    const newStaff = { id, ...staffAdd};
+    this.setState({
+     Staffs: [...this.state.Staffs, newStaff]
+  });
   }
 
   render() {
@@ -35,7 +45,7 @@ class Main extends Component {
      
       <div>
         <Routes>
-              <Route path='NhanVien' element={<StaffList Staffs={this.state.Staffs} Departments={this.state.Departments} />}/>
+              <Route path='NhanVien' element={<StaffList Staffs={this.state.Staffs} Departments={this.state.Departments} onAdd={this.addStaff}/>}/>
               <Route path='NhanVien/:id' element={<StaffWithId />}/>
               <Route path='PhongBan' element={<Department Department={this.state.Departments} />}/>
               <Route path='BangLuong' element={<Salary Staffs={this.state.Staffs} />}/>
