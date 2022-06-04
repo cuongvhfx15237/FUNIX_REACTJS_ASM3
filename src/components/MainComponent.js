@@ -28,6 +28,8 @@ class Main extends Component {
     this.setState({
      Staffs: [...this.state.Staffs, newStaff]
   });
+  console.log(newStaff)
+  console.log(this.state.Staffs)
   }
 
   render() {

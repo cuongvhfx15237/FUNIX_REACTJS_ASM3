@@ -40,7 +40,6 @@ function StaffList(props, iStaffs) {
   })
 
   function toggleModal(){
-    debugger
     setModalAdd(
     !modalAdd,
     )
@@ -58,12 +57,27 @@ function StaffList(props, iStaffs) {
   function handleInputChange(event) {
     event.preventDefault();
     const target = event.target;
-    const value = target.value;
     const name = target.name;
+    let value ;
+    if (name==="annualLeave"||name==="overTime" || name==="salaryScale"){
+      value = parseInt(target.value)
+      console.log(value)
+    }
+    else if(name === "doB"|| name==="startDate"){
+      value = (new Date(target.value)).toISOString();
+      console.log(value)
+    }
+    else if (name === "department"){
+      value = props.Departments[target.value]
+      console.log(value)
+    }
+    else {
+       value=target.value
+       console.log(value)
+    };
     setItemStaff({...itemStaff,
       [name]: value,
     });
-    console.log(itemStaff);
   }
   const handleSubmit = (event) =>{
     event.preventDefault();
@@ -76,7 +90,6 @@ function StaffList(props, iStaffs) {
       annualLeave: itemStaff.annualLeave,
       overTime: itemStaff.overTime,
       image: "/assets/images/alberto.png",
-      testsend:"done club"
     };
       props.onAdd(newStaff)
   }
@@ -126,11 +139,11 @@ function StaffList(props, iStaffs) {
   //params : iStaff
   const [searchName, setSearchName] = useState("");
   const mySearch = () => {
-    debugger
     setSearchName(document.getElementById("SearchName").value);
   };
   if (searchName === "") {
     iStaffs = props.Staffs;
+    // console.log(iStaffs);
   } else {
     iStaffs = props.Staffs.filter(
       (iStaff) => iStaff.name.match(eval("/" + searchName + "/gi")) != null
