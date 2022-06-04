@@ -38,13 +38,14 @@ function StaffList(props, iStaffs) {
       overTime: false,
     }
   })
-
+  {/* function to control Modal add Staff
+- Params AddModal : false to close*/}
   function toggleModal(){
     setModalAdd(
     !modalAdd,
     )
   }
-
+  {/* control database of Name - DdoB - startDate and validate value*/}
   const handleBlur = (field) =>  (e) => {
     e.preventDefault();
     setItemStaff({
@@ -53,7 +54,10 @@ function StaffList(props, iStaffs) {
     })
   };
 
-
+  {/* function to control data when changed
+- Params name: name of object of staff info
+- value value of name object
+- use onAdd to pass value newStaff info from children component to Main component*/}
   function handleInputChange(event) {
     event.preventDefault();
     const target = event.target;
@@ -287,7 +291,6 @@ const errors = validate(itemStaff.name, itemStaff.doB, itemStaff.startDate, item
                       type="date"
                       id="doB"
                       name="doB"
-                      value={itemStaff.doB}
                       valid={errors.doB === ""}
                       invalid={errors.doB !== ""}
                       onBlur={handleBlur("doB")}
@@ -307,7 +310,6 @@ const errors = validate(itemStaff.name, itemStaff.doB, itemStaff.startDate, item
                       type="date"
                       id="startDate"
                       name="startDate"
-                      value={itemStaff.startDate}
                       valid={errors.startDate === ""}
                       invalid={errors.startDate !== ""}
                       onBlur={handleBlur("startDate")}
