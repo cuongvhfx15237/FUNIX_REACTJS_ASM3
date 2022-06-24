@@ -329,7 +329,7 @@ function StaffList(props, iStaffs) {
                       name="annualLeave"
                     />
                   </Row>
-                  <Row className="row" id="form-group"> *
+                  <Row className="row" id="form-group"> 
                     <Label className="col-sm-12 col-md-4 col-xl-3" htmlFor="overTime">
                       Số ngày làm thêm
                     </Label>

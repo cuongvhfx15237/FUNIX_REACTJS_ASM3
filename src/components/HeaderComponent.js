@@ -20,22 +20,22 @@ function Header(){
                             <Nav navbar>
                             <NavItem>
                                 <NavLink className="nav-link"  to='/Nhanvien'>
-                                    <img src="assets/images/public.png" alt="NVIcon" height="20px" width="20px"/>
-                                    <span className="fa fa-home fa-lg" style={{fontSize:'20px'}}>Nhân viên</span>
+                                <i class="fa fa-users" aria-hidden="true"></i>
+                                    <span  style={{fontSize:'20px'}}>   Nhân viên</span>
                                     
                                 </NavLink>
                             </NavItem>
                             <NavItem>
                                 <NavLink className="nav-link" to='/PhongBan'>
-                                <img src="assets/images/Department.png" alt="PBIcon" height="20px" width="20px"/>
-                                    <span className="fa fa-info fa-lg" style={{fontSize:'20px'}}>Phòng Ban</span> 
+                                <i class="fa fa-folder-open" aria-hidden="true"></i>
+                                    <span style={{fontSize:'20px'}}>   Phòng Ban</span> 
                                     
                                 </NavLink>
                             </NavItem>
                             <NavItem>
                                 <NavLink className="nav-link"  to='/BangLuong'>
-                                <img src="assets/images/money.png" alt="LuongIcon" height="20px" width="20px"/>
-                                    <span className="fa fa-list fa-lg" style={{fontSize:'20px'}}>Bảng Lương</span> 
+                                <i class="fa fa-money" aria-hidden="true"></i>
+                                    <span style={{fontSize:'20px'}}>   Bảng Lương</span> 
                                     
                                     </NavLink>
                             </NavItem>

@@ -49,7 +49,7 @@ class Main extends Component {
         <Routes>
               <Route path='NhanVien' element={<StaffList Staffs={this.state.Staffs} Departments={this.state.Departments} onAdd={this.addStaff}/>}/>
               <Route path='NhanVien/:id' element={<StaffWithId />}/>
-              <Route path='PhongBan' element={<Department Department={this.state.Departments} />}/>
+              <Route path='PhongBan' element={<Department Department={this.state.Departments} staffs={this.state.Staffs}/>}/>
               <Route path='BangLuong' element={<Salary Staffs={this.state.Staffs} />}/>
               <Route path='*' element={<Navigate to="/Nhanvien" />}/>
         </Routes>

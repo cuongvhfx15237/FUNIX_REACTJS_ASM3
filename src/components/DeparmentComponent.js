@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "reactstrap";
+import { Card, CardImg, CardBody, CardTitle } from "reactstrap";
 import { Breadcrumb, BreadcrumbItem } from "reactstrap";
 import { Link } from "react-router-dom";
 
@@ -18,6 +18,21 @@ function Department (props){
             </div>
           );
           });
+
+          const staffOfDepart = props.staffs.filter((staff) => staff.departmentId === props.Department.id).map((staff) =>{
+             return(
+                <div key={staff.id} className="col-md-2 col-sm-4 col-6 my-2">
+                   <Card className="shadow-lg">
+                      <Link to={`/nhanvien/${staff.id}`}>
+                         <CardImg src={staff.image} width="100%" alt={staff.name} />
+                         <CardBody className="bg-dark">
+                            <CardTitle>{staff.name}</CardTitle>
+                         </CardBody>
+                      </Link>
+                   </Card>
+                </div>
+             )
+          })
           
     return (
       <div className="container-fluid">
