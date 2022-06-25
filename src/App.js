@@ -5,7 +5,8 @@ import { STAFFS } from './shared/staffs.jsx';
 import Header from "./components/HeaderComponent";
 import Footer from "./components/FooterComponent";
 import Main from './components/MainComponent';
-
+import 'font-awesome/css/font-awesome.css';
+import 'bootstrap-social/bootstrap-social.css';
 
 class App extends Component {
   constructor(props){
